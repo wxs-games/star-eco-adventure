@@ -310,7 +310,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -355,7 +355,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -400,7 +400,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -445,7 +445,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -490,7 +490,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -983,15 +983,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2919318702730234976, guid: cd71ca7ad19ff624bb2bafa77a26aefc, type: 3}
       propertyPath: m_Size.x
-      value: 0.2271843
+      value: 1.6
       objectReference: {fileID: 0}
     - target: {fileID: 2919318702730234976, guid: cd71ca7ad19ff624bb2bafa77a26aefc, type: 3}
       propertyPath: m_Offset.x
-      value: 0.028635979
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2919318702730234976, guid: cd71ca7ad19ff624bb2bafa77a26aefc, type: 3}
       propertyPath: m_Offset.y
-      value: -0.110185266
+      value: -0.11
       objectReference: {fileID: 0}
     - target: {fileID: 3348617008470950075, guid: cd71ca7ad19ff624bb2bafa77a26aefc, type: 3}
       propertyPath: m_Name
@@ -1124,7 +1124,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -1169,7 +1169,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -1214,7 +1214,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -1259,7 +1259,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -1304,7 +1304,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.460981, y: 2.6399999}
+    oldSize: {x: 4.46099, y: 2.6399999}
     newSize: {x: 4.460981, y: 2.6399999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -2239,7 +2239,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.399654, y: 1.6557094}
+    oldSize: {x: 1.4002386, y: 1.6557094}
     newSize: {x: 1.399654, y: 1.6557094}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
