@@ -47,7 +47,9 @@ namespace StarEco.Eco
 
             if (_sprite != null)
             {
-                _sprite.color = _config.GarbagePollutedTint;
+                // 堵塞物用垃圾墙贴图（本身有完整色彩），不再整体染色 —— 染色会把画面压成黑块。
+                // 污染态改为「压暗 + 去饱和」，净化过程中逐渐恢复原色。
+                _sprite.color = new Color(0.62f, 0.60f, 0.58f, 1f);
             }
         }
 
@@ -68,11 +70,12 @@ namespace StarEco.Eco
 
             if (_progress < required)
             {
-                // 进度即时反馈：污染色 → 净化色插值（同 GarbagePile 做法）
+                // 进度即时反馈：从压暗去饱和逐渐恢复到原色（同 GarbagePile 的插值思路，
+                // 但基准色改为白色而非污染色，避免贴图被整体染色）
                 if (_sprite != null)
                 {
-                    _sprite.color = Color.Lerp(_config.GarbagePollutedTint, _config.GarbageCleanTint,
-                        Mathf.Clamp01((float)_progress / Mathf.Max(1, required)));
+                    float t = Mathf.Clamp01((float)_progress / Mathf.Max(1, required));
+                    _sprite.color = Color.Lerp(new Color(0.62f, 0.60f, 0.58f, 1f), Color.white, t);
                 }
                 return;
             }
@@ -88,7 +91,7 @@ namespace StarEco.Eco
             gameObject.SetActive(true);
             if (_sprite != null)
             {
-                _sprite.color = _config != null ? _config.GarbagePollutedTint : Color.gray;
+                _sprite.color = new Color(0.62f, 0.60f, 0.58f, 1f);
             }
         }
 

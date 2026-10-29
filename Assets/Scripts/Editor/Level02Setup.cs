@@ -428,9 +428,22 @@ namespace StarEco.EditorTools
             List<StarEco.Eco.WaterBlockage> output)
         {
             var go = MakeWorldBox(targetId, white, 1.6f, 1.6f, pos,
-                new Color(0.45f, 0.38f, 0.32f, 1f), 0);
-            // 堵塞物用污染水面贴图（与河道同一套素材，语义上是"漂在水面上的污物"）
-            ApplyTile(go, "water_river.png");
+                new Color(0.62f, 0.60f, 0.58f, 1f), 0);
+            // 堵塞物用垃圾墙素材（garbage_wall.png：一堆积压的纸箱/瓶子/轮胎）。
+            // 之前误用 water_river.png（一条水面横条）+ 整体染色 → 渲染成一大片黑色矩形，
+            // 把树和背景全盖住，看着像"坏掉的贴图"。
+            ApplyPropScaled(go.GetComponent<SpriteRenderer>(), go.transform,
+                "garbage_wall.png", pos, 1.75f, 0f);
+            // 贴地：贴图下缘是散开的碎屑，实心堆体略高于底
+            go.transform.position = new Vector3(pos.x, 0.83f, pos.z);
+
+            var col = go.GetComponent<UnityEngine.BoxCollider2D>();
+            if (col != null)
+            {
+                col.size = new Vector2(2.05f, 1.45f);
+                col.offset = new Vector2(0f, 0.05f);
+            }
+
             var blockage = go.AddComponent<StarEco.Eco.WaterBlockage>();
 
             var so = new SerializedObject(blockage);
@@ -468,6 +481,10 @@ namespace StarEco.EditorTools
 
             var col = cage.AddComponent<BoxCollider2D>();
             col.size = new Vector2(1.3f, 1.3f);
+            // 必须设为触发器：RescueTarget 用的是距离检测（Vector2.Distance <= _radius），
+            // 不依赖碰撞体。设成实体碰撞体会让笼子变成一堵墙，玩家走到笼前就被挡住，
+            // 导致关卡推进不了。
+            col.isTrigger = true;
 
             var rescue = cage.AddComponent<RescueTarget>();
             var so = new SerializedObject(rescue);
@@ -567,6 +584,31 @@ namespace StarEco.EditorTools
             sr.size = prop.bounds.size;
             tf.localScale = Vector3.one;
             tf.position = new Vector3(pos.x, groundY + prop.bounds.size.y * 0.5f + yOffset, pos.z);
+            return true;
+        }
+
+        /// <summary>
+        /// ApplyProp 的可控高度版本：按目标世界高度等比缩放贴图，再贴到 groundY。
+        /// ApplyProp 用贴图原生尺寸（garbage_wall 原生高约 3.1u），直接用会过大且压不住场景比例。
+        /// </summary>
+        private static bool ApplyPropScaled(SpriteRenderer sr, Transform tf, string propFile,
+            Vector3 pos, float targetHeight, float yOffset)
+        {
+            var prop = AssetDatabase.LoadAssetAtPath<Sprite>(PropsDir + propFile);
+            if (prop == null)
+            {
+                return false;
+            }
+
+            sr.sprite = prop;
+            sr.color = new Color(0.62f, 0.60f, 0.58f, 1f);
+            sr.drawMode = SpriteDrawMode.Simple;
+            sr.size = prop.bounds.size;
+
+            float nativeH = prop.bounds.size.y;
+            float s = nativeH > 0.0001f ? targetHeight / nativeH : 1f;
+            tf.localScale = new Vector3(s, s, 1f);
+            tf.position = new Vector3(pos.x, targetHeight * 0.5f + yOffset, pos.z);
             return true;
         }
 

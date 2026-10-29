@@ -41,9 +41,36 @@ namespace StarEco.Level
         private float _openTimer;
         private bool _opening;
 
-        private void OnEnable()
+        // 气泡 Canvas 只在运行时创建。
+        // 不能放 OnEnable：编辑器模式下 OnEnable 也会跑，会把世界空间 Canvas 建进场景，
+        // 在 Scene 视图里显示成一大片白色线框（看起来像"挡住路"的隐形墙）。
+        // Awake 仅在 Play 模式触发，是创建运行时 UI 的正确位置。
+        private void Awake()
         {
             BuildBubble();
+        }
+
+        private void OnEnable()
+        {
+            // 运行时重新启用（对象池取回）时确保气泡存在
+            if (_bubble == null)
+            {
+                BuildBubble();
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (_bubble != null)
+            {
+                var canvasGo = _bubble.transform.parent != null
+                    ? _bubble.transform.parent.gameObject
+                    : _bubble.gameObject;
+                if (canvasGo != gameObject)
+                {
+                    UnityEngine.Object.Destroy(canvasGo);
+                }
+            }
         }
 
         private void OnDisable()
