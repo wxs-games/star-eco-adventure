@@ -1,0 +1,370 @@
+"""从侧视图切出可动部件（2D 骨骼 / cutout 风格）
+
+设计原则：
+  1. 像素全部来自原始侧视图，不做任何重绘；因此画风 100% 一致
+  2. 每个关节附近用「纹理外推」补一块渐变圆盘，旋转时不会露洞
+  3. 只切一个近侧手臂、一条近侧腿，远侧用同一份素材压暗复用
+     —— 远侧腿在原图里脚尖朝左，若直接复用会前后颠倒
+  4. 上半身（头+躯干+水壶+皮带）作为一整块刚性件，绕髋部整体前倾
+
+用法：
+  python rig_side.py cut    --src cut/v3_side.png --outdir rig
+  python rig_side.py render --parts rig --outdir frames --n 12
+"""
+import argparse
+import json
+import math
+import os
+
+import numpy as np
+from PIL import Image
+from scipy import ndimage
+
+# ---------------- 原生图（1440x1920）关节坐标 ----------------
+J = {
+    "hip":      (800, 1220),
+    "knee":     (884, 1478),
+    "ankle":    (905, 1700),
+    "shoulder": (893, 812),
+    "elbow":    (995, 1040),
+    "wrist":    (1030, 1150),
+}
+FAR_SHOULDER = (610, 782)   # 远侧肩（水壶后方，被遮挡）
+FAR_HIP = (742, 1222)       # 远侧髋（比近侧略后）
+# 大腿上沿截断线（两腿在此之上连成一片）
+CUT_HIP_Y = 1302
+CUT_KNEE_Y = 1478
+ARM_TOP_Y = 752          # 近侧袖口上沿
+
+# 关节补洞圆盘半径（像素）
+FILL = {"hip": 100, "hip_far": 150, "knee": 62, "shoulder": 42, "elbow": 46}
+
+# 输出画布
+CANVAS = (1200, 833)
+SCALE = 0.42
+OUT_HIP = (600, 545)
+
+
+def masks(rgb):
+    R, G, B = rgb[..., 0], rgb[..., 1], rgb[..., 2]
+    mx = rgb.max(axis=2)
+    mn = rgb.min(axis=2)
+    return {
+        "skin":  (R > 230) & (G > 175) & (B > 150) & (R >= G) & (G >= B - 8),
+        "white": (mx > 226) & (mx - mn < 30),
+        "green": (G > 115) & (G > R + 25) & (G > B + 45),
+        "teal":  (B > 80) & (B > R + 42) & (G > R + 42) & (R < 115),
+        "brown": (R > 100) & (R < 220) & (G > 60) & (G < 152) & (B < 118) & (R > G + 24) & (G > B + 4),
+        "blue":  (B > 150) & (B > R + 40) & (B > G + 12),
+    }
+
+
+def extend(rgba_out, dst_mask, pivot, radius, clip_y=None, allow=None,
+           src_mask=None, src_rgb=None, erode=8):
+    """关节补洞：把 dst_mask 缺失处用「最近邻的源像素」补齐。
+
+    src_mask/src_rgb 允许换一个取样源 —— 髋部就用骨盆的裤子像素来补，
+    这样补出来的色块和骨盆完全同色，叠在骨盆上看不出接缝。
+    """
+    H, W = dst_mask.shape
+    yy, xx = np.ogrid[:H, :W]
+    disk = (xx - pivot[0]) ** 2 + (yy - pivot[1]) ** 2 <= radius * radius
+    if clip_y is not None:
+        disk = disk & (yy > clip_y)
+    if allow is not None:
+        disk = disk & allow
+    need = disk & ~dst_mask
+    if not need.any():
+        return 0
+    sm = dst_mask if src_mask is None else src_mask
+    srgb = rgba_out[..., :3] if src_rgb is None else src_rgb
+    er = ndimage.binary_erosion(sm, iterations=erode)
+    if er.sum() < 300:
+        er = sm
+    ind = ndimage.distance_transform_edt(~er, return_distances=False, return_indices=True)
+    ys, xs = np.where(need)
+    rgba_out[ys, xs, :3] = srgb[ind[0][ys, xs], ind[1][ys, xs], :3]
+    rgba_out[ys, xs, 3] = 255
+    dst_mask[ys, xs] = True
+    return int(need.sum())
+
+
+def biggest(m, k=1, limit=None):
+    lab, n = ndimage.label(m, structure=np.ones((3, 3)))
+    if n == 0:
+        return m
+    sz = ndimage.sum(m, lab, range(1, n + 1))
+    out = np.zeros_like(m)
+    for j in np.argsort(sz)[::-1][:k]:
+        out |= lab == j + 1
+    return out
+
+
+def save_part(rgba, mask, path, canvas=CANVAS, scale=SCALE, hip=OUT_HIP, src_hip=J["hip"]):
+    H, W = mask.shape
+    out = np.zeros((H, W, 4), np.uint8)
+    out[..., :3] = rgba[..., :3]
+    out[..., 3] = np.where(mask, rgba[..., 3], 0).astype(np.uint8)
+    im = Image.fromarray(out, "RGBA")
+    # 输出坐标 X = hip_x + (x - src_hip_x)*s  =>  x = src_hip_x + (X-hip_x)/s
+    inv = 1.0 / scale
+    coeffs = (inv, 0, src_hip[0] - hip[0] * inv,
+              0, inv, src_hip[1] - hip[1] * inv)
+    im = im.transform(canvas, Image.AFFINE, coeffs, resample=Image.BICUBIC)
+    im.save(path)
+    return im
+
+
+def cmd_cut(a):
+    os.makedirs(a.outdir, exist_ok=True)
+    src = Image.open(a.src).convert("RGBA")
+    arr = np.array(src)
+    rgb = arr[..., :3].astype(np.int16)
+    al = arr[..., 3]
+    fg = al > 100
+    H, W = fg.shape
+    Y, X = np.mgrid[0:H, 0:W]
+    m = masks(rgb)
+
+    # ---------- 近侧手臂：白袖 + 裸臂 + 手 ----------
+    core = (fg & m["skin"] & (X > 866) & (Y > 880)) | \
+           (fg & m["white"] & (X > 870) & (X < 960) & (Y > ARM_TOP_Y) & (Y < 950))
+    arm = ndimage.binary_dilation(core, iterations=9) & fg & (X > 860) & \
+          ~(m["green"] | m["teal"] | m["blue"])
+    arm = biggest(arm, 1)   # 只留最大连通块，避免把靴子高光等碎块带进来
+    arm_u = arm & (Y < J["elbow"][1])
+    arm_f = arm & (Y >= J["elbow"][1])
+
+    # ---------- 腿：近侧整条腿（上沿 1302，膝盖 1478 断开）----------
+    legex = (m["teal"] | m["brown"]) & (Y >= CUT_HIP_Y) & (X > 380)
+    legex = ndimage.binary_closing(legex, np.ones((5, 5)))
+    lab, n = ndimage.label(legex, structure=np.ones((3, 3)))
+    sz = ndimage.sum(legex, lab, range(1, n + 1))
+    cx = []
+    for j in range(n):
+        xs = np.where(lab == j + 1)[1]
+        cx.append(xs.mean() if len(xs) else 0)
+    order = [j for j in np.argsort(sz)[::-1] if sz[j] > 3000][:2]
+    order.sort(key=lambda j: cx[j])
+    far_leg = lab == order[0] + 1
+    near_leg = lab == order[1] + 1
+    near_leg = ndimage.binary_dilation(near_leg, iterations=6) & fg & (Y >= CUT_HIP_Y - 6)
+    far_leg = ndimage.binary_dilation(far_leg, iterations=6) & fg & (Y >= CUT_HIP_Y - 6)
+    near_leg = biggest(near_leg, 1)   # 去掉地面碎线等零星连通块
+    far_leg = biggest(far_leg, 1)
+    leg_u = near_leg & (Y < CUT_KNEE_Y)
+    leg_f = near_leg & (Y >= CUT_KNEE_Y)
+
+    # ---------- 远侧手臂：不单独切，留在躯干里保持原样 ----------
+    # 它的肩在水壶后面，可见部分离肩 300~500px，任何绕肩旋转都会把切口甩出来
+    far_arm = np.zeros_like(fg)
+
+    # ---------- 躯干（含头、水壶、骨盆、远侧肩袖）----------
+    body = fg & ~arm & ~near_leg & ~far_leg & ~far_arm
+
+    # ---------- 皮带：单独一层，画在腿之上，盖住髋部圆帽的上缘 ----------
+    belt = fg & (Y > 1088) & (Y < 1182) & (X > 556) & (X < 944) & (rgb.max(axis=2) < 130)
+    belt = ndimage.binary_closing(belt, np.ones((7, 7)))
+    belt = biggest(belt, 1)
+    body = body & ~belt
+
+    # 躯干下沿改成裤裆 V 形：水平直切一旦腿摆开就会露出「短裤平底」的方片
+    ybot = 1258 + 46 * np.clip(1.0 - ((X - 752) / 168.0) ** 2, 0.0, 1.0)
+    body = body & (Y < ybot)
+
+    # 髋部补洞的色源：只用躯干的裤子像素，避免把马甲绿/皮带灰取样进来
+    pants_src = body & (m["teal"] | m["brown"])
+
+    parts = {}
+    report = []
+    # 髋部：补成以髋关节为圆心的整圆 —— 圆心角不变，旋转时轮廓不跳
+    allow_hip = None
+    grow = lambda mk, k: ndimage.binary_dilation(mk, iterations=k)
+    for name, mask, piv, rad, cy, al, sm, er in [
+        ("arm_u",    arm_u,    J["shoulder"], FILL["shoulder"], None, grow(arm, 14),     None, 12),
+        ("arm_f",    arm_f,    J["elbow"],    FILL["elbow"],    None, grow(arm, 14),     None, 8),
+        ("leg_u",    leg_u,    J["hip"],      FILL["hip"],      None, None,              pants_src, 6),
+        ("leg_f",    leg_f,    J["knee"],     FILL["knee"],     None, grow(leg_f, 18),   None, 8),
+        ("far_arm",  far_arm,  FAR_SHOULDER,  FILL["shoulder"], None, grow(far_arm, 14), None, 8),
+    ]:
+        mm = mask.copy()
+        rg = rgb.astype(np.uint8).copy()
+        alpha = np.where(mm, 255, 0).astype(np.uint8)
+        stack = np.dstack([rg, alpha])
+        filled = extend(stack, mm, piv, rad, cy, al, sm, rgb.astype(np.uint8), er)
+        parts[name] = mm
+        save_part(stack.astype(np.uint8), mm, os.path.join(a.outdir, name + ".png"))
+        report.append(f"  {name:8s} {int(mask.sum()):7d}px  补洞 {filled:6d}px")
+
+    # 远腿专用大腿件：髋帽圆心放在远侧髋，这样躯干裤裆 V 的左下角也能被盖住
+    mm = leg_u.copy()
+    stack = np.dstack([rgb.astype(np.uint8), np.where(mm, 255, 0).astype(np.uint8)])
+    filled = extend(stack, mm, FAR_HIP, FILL["hip_far"], None, None, pants_src,
+                    rgb.astype(np.uint8), 6)
+    save_part(stack.astype(np.uint8), mm, os.path.join(a.outdir, "leg_u_far.png"))
+    report.append(f"  leg_u_far {int(leg_u.sum()):6d}px  补洞 {filled:6d}px")
+
+    belt_img = np.dstack([rgb.astype(np.uint8), np.where(belt, 255, 0).astype(np.uint8)])
+    save_part(belt_img, belt, os.path.join(a.outdir, "belt.png"))
+
+    body_img = np.dstack([rgb.astype(np.uint8),
+                          np.where(body, 255, 0).astype(np.uint8)])
+    save_part(body_img, body, os.path.join(a.outdir, "body.png"))
+
+    meta = {"joints_src": J, "scale": SCALE, "canvas": CANVAS, "out_hip": OUT_HIP,
+            "cut_hip_y": CUT_HIP_Y, "cut_knee_y": CUT_KNEE_Y}
+    with open(os.path.join(a.outdir, "rig.json"), "w", encoding="utf-8") as f:
+        json.dump(meta, f, ensure_ascii=False, indent=2)
+
+    # 颜色校验图
+    colors = {"body": (255, 60, 60), "arm_u": (255, 220, 0), "arm_f": (0, 255, 120),
+              "leg_u": (150, 90, 255), "leg_f": (255, 140, 0), "far_arm": (0, 220, 255)}
+    ov = np.array(src.convert("RGB")).astype(float)
+    tint = np.zeros_like(ov)
+    sel = np.zeros(fg.shape, bool)
+    for name, mask in parts.items():
+        tint[mask] = colors[name]
+        sel |= mask
+    out = ov.copy()
+    out[sel] = ov[sel] * 0.45 + tint[sel] * 0.55
+    Image.fromarray(out.astype(np.uint8)).save(os.path.join(a.outdir, "_parts_color.png"))
+
+    print("[cut] 部件像素统计")
+    print("\n".join(report))
+    print(f"  body     {int(body.sum()):7d}px")
+    for nm, mm in [("near_leg", near_leg), ("far_leg", far_leg)]:
+        ys, xs = np.where(mm)
+        print(f"  {nm} bbox x[{xs.min()},{xs.max()}] y[{ys.min()},{ys.max()}]")
+    print(f"[ok] 写出到 {a.outdir}")
+
+
+
+
+# ======================= 渲染 =======================
+def _load(parts, name, canvas):
+    return Image.open(os.path.join(parts, name + ".png")).convert("RGBA")
+
+
+def _layer(img, ops):
+    """ops: [(pivot, angle), ...] 由内到外依次旋转。PIL 正角度=逆时针（视觉）。"""
+    im = img
+    for pivot, ang in ops:
+        if abs(ang) < 0.01:
+            continue
+        im = im.rotate(ang, center=pivot, resample=Image.BICUBIC)
+    return im
+
+
+def _shade(img, k):
+    if k >= 0.999:
+        return img
+    a = np.array(img)
+    rgb = a[..., :3].astype(np.float32) * k
+    a[..., :3] = np.clip(rgb, 0, 255).astype(np.uint8)
+    return Image.fromarray(a, "RGBA")
+
+
+def joints_canvas(meta):
+    s = meta["scale"]; hx, hy = meta["out_hip"]; sx, sy = meta["joints_src"]["hip"]
+    J = dict(meta["joints_src"])
+    J["far_shoulder"] = FAR_SHOULDER
+    J["far_hip"] = FAR_HIP
+    return {k: (hx + (v[0] - sx) * s, hy + (v[1] - sy) * s) for k, v in J.items()}
+
+
+def cmd_render(a):
+    meta = json.load(open(os.path.join(a.parts, "rig.json"), encoding="utf-8"))
+    cv = tuple(meta["canvas"])
+    Jc = joints_canvas(meta)
+    hip, knee, sh, el, fsh = Jc["hip"], Jc["knee"], Jc["shoulder"], Jc["elbow"], Jc["far_shoulder"]
+    fhip = Jc["far_hip"]
+
+    P = {"body": _load(a.parts, "body", cv), "arm_u": _load(a.parts, "arm_u", cv),
+         "arm_f": _load(a.parts, "arm_f", cv), "leg_u": _load(a.parts, "leg_u", cv),
+         "leg_f": _load(a.parts, "leg_f", cv), "far_arm": _load(a.parts, "far_arm", cv),
+         "belt": _load(a.parts, "belt", cv),
+         "leg_u_far": _load(a.parts, "leg_u_far", cv)}
+
+    os.makedirs(a.outdir, exist_ok=True)
+    n = a.n
+    idxs = range(n) if not a.only else [int(t) for t in a.only.split(",")]
+
+    # 每帧角度
+    for i in idxs:
+        p = i / n
+        if a.rest:
+            th_t = th_k = 0.0; th_a = th_e = 0.0; tilt = 0.0
+            pb = p
+        else:
+            pb = p
+            th_t = a.thigh * math.cos(2 * math.pi * (pb - 0.05)) - a.thigh_bias
+            flex = a.knee * max(0.0, math.sin(2 * math.pi * (pb - 0.40))) ** 1.2 + a.knee_base
+            th_k = 12.6 - flex
+            th_a = -a.arm * math.cos(2 * math.pi * (pb - 0.05))
+            th_e = a.elbow + a.elbow_var * math.sin(2 * math.pi * (pb - 0.05))
+            tilt = -a.tilt
+
+        pf = (p + 0.5) % 1.0
+        th_t_f = a.thigh * math.cos(2 * math.pi * (pf - 0.05)) - a.thigh_bias
+        flex_f = a.knee * max(0.0, math.sin(2 * math.pi * (pf - 0.40))) ** 1.2 + a.knee_base
+        th_k_f = 12.6 - flex_f
+        th_a_f = -a.arm * math.cos(2 * math.pi * (pf - 0.05))
+
+        def leg(thigh, knee_ang, u_img=None, h=None):
+            h = h or hip
+            u = _layer(u_img or P["leg_u"], [(h, thigh)])
+            f = _layer(P["leg_f"], [(knee, knee_ang), (h, thigh)])
+            return u, f
+
+        out = Image.new("RGBA", cv, (0, 0, 0, 0))
+        # 远侧腿（压暗）
+        u, f = leg(th_t_f, th_k_f, P["leg_u_far"], fhip)
+        out.alpha_composite(_shade(f, a.shade))
+        out.alpha_composite(_shade(u, a.shade))
+        # 远侧手臂（压暗）
+        fa = _layer(P["far_arm"], [(fsh, th_a_f), (hip, tilt)])
+        out.alpha_composite(_shade(fa, a.shade))
+        # 躯干
+        out.alpha_composite(_layer(P["body"], [(hip, tilt)]))
+        # 近侧腿
+        u, f = leg(th_t, th_k)
+        out.alpha_composite(f)
+        out.alpha_composite(u)
+        # 皮带：盖住髋部圆帽上缘
+        out.alpha_composite(_layer(P["belt"], [(hip, tilt)]))
+        # 近侧手臂
+        au = _layer(P["arm_u"], [(sh, th_a), (hip, tilt)])
+        af = _layer(P["arm_f"], [(el, th_e), (sh, th_a), (hip, tilt)])
+        out.alpha_composite(au)
+        out.alpha_composite(af)
+
+        name = f"run_{i:02d}.png" if not a.rest else "rest.png"
+        out.save(os.path.join(a.outdir, name))
+    print(f"[render] {len(list(idxs))} 帧 -> {a.outdir}")
+
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    c = sub.add_parser("cut")
+    c.add_argument("--src", default="cut/v3_side.png")
+    c.add_argument("--outdir", default="rig")
+    c.set_defaults(func=cmd_cut)
+    r = sub.add_parser("render")
+    r.add_argument("--parts", default="rig")
+    r.add_argument("--outdir", default="frames")
+    r.add_argument("--n", type=int, default=12)
+    r.add_argument("--only", default="")
+    r.add_argument("--rest", action="store_true")
+    r.add_argument("--thigh", type=float, default=30.0)
+    r.add_argument("--thigh-bias", type=float, default=8.0)
+    r.add_argument("--knee", type=float, default=78.0)
+    r.add_argument("--knee-base", type=float, default=6.0)
+    r.add_argument("--arm", type=float, default=24.0)
+    r.add_argument("--elbow", type=float, default=26.0)
+    r.add_argument("--elbow-var", type=float, default=10.0)
+    r.add_argument("--tilt", type=float, default=6.0)
+    r.add_argument("--shade", type=float, default=0.86)
+    r.set_defaults(func=cmd_render)
+    a = ap.parse_args()
+    a.func(a)

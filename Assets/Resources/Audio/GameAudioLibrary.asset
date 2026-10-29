@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95bf6fae3b023d84b986163ae80e0f7a, type: 3}
+  m_Name: GameAudioLibrary
+  m_EditorClassIdentifier: 
+  Sfx:
+  - Id: 0
+    Clip: {fileID: 8300000, guid: c4172042af2c47a4095e2772b529e1ed, type: 3}
+  - Id: 1
+    Clip: {fileID: 8300000, guid: d2e5d30e771357e49b306bac1284f1ef, type: 3}
+  - Id: 2
+    Clip: {fileID: 8300000, guid: 37c7933cd43fab241b339b57bb5edae2, type: 3}
+  - Id: 3
+    Clip: {fileID: 8300000, guid: 5dd1a0e128c1f884580fe980b307f956, type: 3}
+  - Id: 4
+    Clip: {fileID: 8300000, guid: f01a8a958f751b64d8c28984732df89a, type: 3}
+  - Id: 5
+    Clip: {fileID: 8300000, guid: 60a23c23a5faeab4abbc3fe74e5822c9, type: 3}
+  - Id: 6
+    Clip: {fileID: 8300000, guid: ab5183f7f517bd548827ef3c7ff6425b, type: 3}
+  - Id: 7
+    Clip: {fileID: 8300000, guid: 4a6d3e0a0288fbb48bcad4e7c4989adf, type: 3}
+  - Id: 8
+    Clip: {fileID: 8300000, guid: 1c7e141079c7dbd4bad1d369562df125, type: 3}
+  - Id: 9
+    Clip: {fileID: 8300000, guid: 97b6c3cc96bb23748b1b3796d15e54f1, type: 3}
+  - Id: 10
+    Clip: {fileID: 8300000, guid: d342f947b6300b54c931571448363af6, type: 3}
+  - Id: 11
+    Clip: {fileID: 8300000, guid: e251d97d54225d443b44fa1c0b950d7b, type: 3}
+  - Id: 12
+    Clip: {fileID: 8300000, guid: d5e786a39bfe94742a52ecdac31b38c2, type: 3}
+  - Id: 13
+    Clip: {fileID: 8300000, guid: 7b7bec27cbc10e94d9e44fd30ecddae7, type: 3}
+  - Id: 14
+    Clip: {fileID: 8300000, guid: d9e0b100976742845908daed3332b0a3, type: 3}
+  - Id: 15
+    Clip: {fileID: 8300000, guid: fa300c09fd8b47f49ac597e1b38e0305, type: 3}
+  - Id: 16
+    Clip: {fileID: 8300000, guid: 5fc7b16e3a0d16843a1dada26d6af541, type: 3}
+  - Id: 17
+    Clip: {fileID: 8300000, guid: 98c6bc28da33e894ab2b1c0faafe8275, type: 3}
+  - Id: 18
+    Clip: {fileID: 8300000, guid: 6a53071fbd6960c489213257a6dfe1a0, type: 3}
+  - Id: 19
+    Clip: {fileID: 8300000, guid: a0389920a7a55ef4d9c05270009e2cdb, type: 3}
+  - Id: 20
+    Clip: {fileID: 8300000, guid: f11a950b859498444b7ed90ce569b085, type: 3}
+  - Id: 21
+    Clip: {fileID: 8300000, guid: 330bb30248d5b584bba4f79e8d07dc10, type: 3}
+  TitleBgm: {fileID: 8300000, guid: 1ecf34b9ad9e09545b6f63c692724368, type: 3}
+  Level01Bgm: {fileID: 8300000, guid: 9f88e1792250f5149845a479efe86c5c, type: 3}
+  Level02Bgm: {fileID: 8300000, guid: 781829714af14a84b942c94cdbe36620, type: 3}
+  Level03Bgm: {fileID: 8300000, guid: de57862f5d5c82943b2c6c676eba8e1c, type: 3}

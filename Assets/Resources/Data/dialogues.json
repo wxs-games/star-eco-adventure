@@ -1,0 +1,94 @@
+{
+    "Dialogues": [
+        {
+            "Id": "ava_intro",
+            "Once": false,
+            "Entries": [
+                {
+                    "Speaker": "生态守卫者 · 艾娃",
+                    "AvatarTint": "#7CFC98",
+                    "Text": "欢迎来到第一颗需要帮助的星球。这里的空气曾经很清新，直到塑料垃圾堆成了山。",
+                    "EventId": ""
+                },
+                {
+                    "Speaker": "生态守卫者 · 艾娃",
+                    "AvatarTint": "#7CFC98",
+                    "Text": "别担心，你手里这把净化喷壶就是最好的工具。靠近垃圾堆，按住 K 喷洒净化剂就行了。",
+                    "EventId": ""
+                },
+                {
+                    "Speaker": "生态守卫者 · 艾娃",
+                    "AvatarTint": "#7CFC98",
+                    "Text": "看到那些挡路的大家伙了吗？长按 L 蓄力，蓄满后松开，一次净化波能清掉一整片。",
+                    "EventId": ""
+                },
+                {
+                    "Speaker": "生态守卫者 · 艾娃",
+                    "AvatarTint": "#7CFC98",
+                    "Text": "路上发光的卡片是环保知识，捡起来会收录进图鉴。收集它们，你会更懂这颗星球病在哪里。",
+                    "EventId": ""
+                },
+                {
+                    "Speaker": "生态守卫者 · 艾娃",
+                    "AvatarTint": "#7CFC98",
+                    "Text": "污染生物会主动攻击你。按 J 挥动夹钳三连击，把它们打退就行，不必赶尽杀绝。",
+                    "EventId": ""
+                },
+                {
+                    "Speaker": "生态守卫者 · 艾娃",
+                    "AvatarTint": "#7CFC98",
+                    "Text": "顺着亮起的路标走吧。当净化值达到百分之百，这颗星球就会重新呼吸。",
+                    "EventId": ""
+                }
+            ]
+        },
+        {
+            "Id": "ava_intro_repeat",
+            "Once": false,
+            "Entries": [
+                {
+                    "Speaker": "生态守卫者 · 艾娃",
+                    "AvatarTint": "#7CFC98",
+                    "Text": "又见面啦。先继续清理附近的塑料垃圾，净化值涨上去之后，这颗星球的呼吸会慢慢恢复。",
+                    "EventId": ""
+                },
+                {
+                    "Speaker": "生态守卫者 · 艾娃",
+                    "AvatarTint": "#7CFC98",
+                    "Text": "如果前面有大片障碍，就长按 L 蓄力；如果有污染生物靠近，就按 J 先把它们击退。",
+                    "EventId": ""
+                },
+                {
+                    "Speaker": "生态守卫者 · 艾娃",
+                    "AvatarTint": "#7CFC98",
+                    "Text": "准备好了就继续出发吧，我会在这里看着你把这颗星球救回来。",
+                    "EventId": ""
+                }
+            ]
+        },
+        {
+            "Id": "signboard_plastic",
+            "Once": false,
+            "Entries": [
+                {
+                    "Speaker": "提示牌",
+                    "AvatarTint": "#8ECFFF",
+                    "Text": "【星球监测站 · 一号提示牌】塑料污染是这颗星球最大的伤口。一个塑料瓶需要约 450 年才能自然分解，分解成的微塑料会渗入土壤与地下水。监测站建议：任何可辨认材质的塑料制品，请优先使用净化喷壶处理，切勿直接焚烧——焚烧产生的二噁英毒性更强。",
+                    "EventId": ""
+                }
+            ]
+        },
+        {
+            "Id": "signboard_recycle",
+            "Once": false,
+            "Entries": [
+                {
+                    "Speaker": "提示牌",
+                    "AvatarTint": "#8ECFFF",
+                    "Text": "【星球监测站 · 二号提示牌】可回收物识别口诀：一看材质、二看清洁、三看标志。1 号 PET 饮料瓶、5 号 PP 餐盒最常见的回收材质；沾染油污的纸盒与复合软包则难以再生。本监测站设有三个分类投放口，净化完成的物资将运往轨道回收站。",
+                    "EventId": ""
+                }
+            ]
+        }
+    ]
+}

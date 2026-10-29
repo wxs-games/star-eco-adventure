@@ -1,0 +1,21 @@
+A single sprite sheet of ONE character running: Player. Grid: exactly 4 columns x 2 rows, 8 figures total, ordered left to right then top to bottom, one figure per cell, no cell empty.
+
+This is ONE continuous right-facing run cycle, in this exact order:
+(1) CONTACT: the front leg is planted almost straight under the body, foot flat on the ground; the other leg is fully extended behind, its boot lifted well off the ground.
+(2) DOWN: the planted knee bends and the body sinks a little; the rear leg swings forward, still behind the body.
+(3) PASSING: THE MOST IMPORTANT FRAME. The swing leg has come forward and now PASSES DIRECTLY IN FRONT OF THE PLANTED LEG: the two legs OVERLAP and form a visible X. The swing shin crosses in front of the planted shin, the swing knee is in front of the planted knee, the swing boot is at the height of the planted knee and clearly in FRONT of it. The near (swing) leg is drawn opaque on top, the far (planted) leg is partly hidden behind it. The legs are NOT drawn apart, NOT side by side, NOT parallel: they cross over each other like a pair of scissors.
+(4) UP: the planted foot pushes off, the body rises, the swing leg reaches forward and up, ready to land.
+(5) CONTACT with the OTHER leg now in front (mirror of frame 1).
+(6) DOWN: weight sinks onto that leg (mirror of frame 2).
+(7) PASSING: the other leg now crosses in front of the planted leg, forming the same visible X again (mirror of frame 3).
+(8) UP: push off and loop back to frame 1 (mirror of frame 4).
+
+RULES FOR THE LEGS: in the two passing frames (3 and 7) the legs MUST visibly cross in an X. In every frame exactly one boot touches the ground and the other boot is in the air. Never both feet on the ground. Never draw the legs as two parallel sticks.
+
+ARMS: pump opposite to the legs, both fists up at chest height, elbows bent. Torso leans forward about 10 degrees.
+
+CONSISTENCY: all 8 figures are the same character at the SAME scale and the SAME head size. The top of the orange beanie stays at exactly the same height in all 8 frames; the body never grows or shrinks, only the limbs move.
+
+CHARACTER: identical to the reference image - orange knit beanie, short brown hair, green sleeveless vest over a black shirt, teal cargo pants with a brown belt, brown leather boots, blue backpack with straps. Clean 2D game sprite, cartoon cel shading, bold dark outline, flat colors.
+
+LAYOUT: pure flat white background (#FFFFFF) everywhere: no shadow under the feet, no ground line, no floor, no frame border, no grid lines, no separators. No text, no numbers, no labels, no watermark, no extra props. Every figure shows the FULL body from the top of the hat to the soles of both boots. Every figure must occupy at most 65% of the cell width and at most 85% of the cell height and must leave at least 12% of the cell width completely empty on its left and on its right, at least 8% of the cell height empty above the hat and below the lowest boot. Nothing may touch or approach a cell border. All figures face right in a three-quarter side view from the character's right; the camera never changes angle, never shows the back, never zooms in.

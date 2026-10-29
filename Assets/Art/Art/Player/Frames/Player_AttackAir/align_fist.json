@@ -1,0 +1,44 @@
+[
+ {
+  "frame": "Player_AttackAir_00.png",
+  "shift": -42.1,
+  "ux": 0.00767,
+  "uy": -0.13294,
+  "fist_area": 5122
+ },
+ {
+  "frame": "Player_AttackAir_01.png",
+  "shift": -29.7,
+  "ux": -0.05319,
+  "uy": 0.28742,
+  "fist_area": 1587
+ },
+ {
+  "frame": "Player_AttackAir_02.png",
+  "shift": 28.2,
+  "ux": -0.09521,
+  "uy": -0.15796,
+  "fist_area": 6891
+ },
+ {
+  "frame": "Player_AttackAir_03.png",
+  "shift": 39.1,
+  "ux": -0.11778,
+  "uy": -0.18541,
+  "fist_area": 7855
+ },
+ {
+  "frame": "Player_AttackAir_04.png",
+  "shift": 38.1,
+  "ux": -0.17436,
+  "uy": -0.22562,
+  "fist_area": 7077
+ },
+ {
+  "frame": "Player_AttackAir_05.png",
+  "shift": -28.2,
+  "ux": 0.1424,
+  "uy": -0.33495,
+  "fist_area": 1062
+ }
+]

@@ -1,0 +1,7 @@
+﻿id,currency,direction,amount,per_hour,price_anchor,notes
+flow_kill_slime,gold,faucet,4,120,,????
+flow_kill_elite,gold,faucet,25,12,,????
+flow_daily_quest,gold,faucet,120,1,,????
+flow_shop_potion,gold,sink,20,10,60,?????????????
+flow_upgrade_weapon,gold,sink,300,2,600,????
+flow_repair,gold,sink,10,5,,???

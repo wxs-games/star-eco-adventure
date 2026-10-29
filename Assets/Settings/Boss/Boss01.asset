@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d570d9c4f38b4c4b9aa3eaa6792abce, type: 3}
+  m_Name: Boss01
+  m_EditorClassIdentifier: 
+  EnemyTypeId: Boss01
+  IsStatic: 0
+  AttackKind: 0
+  MaxHP: 80
+  KnockbackResponse: 1
+  MoveSpeed: 2.2
+  AttackDamage: 2
+  AttackRange: 2.2
+  AttackInterval: 2
+  AttackKnockback: 6
+  PerceptionRadius: 20
+  LoseTargetSeconds: 1.5
+  LoseTargetBuffer: 1
+  SameGroundToleranceY: 2
+  HurtStunSeconds: 0.25
+  ProjectileSpeed: 7
+  ProjectileMaxRange: 14
+  ProjectilePrewarm: 10
+  AimSeconds: 0.4
+  FireSeconds: 0.3
+  SpawnSeconds: 0
+  DropTable: {fileID: 0}
+  AnimFrameRate: 12
+  PlayerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  Phase2HpPercent: 60
+  Phase3HpPercent: 30
+  PhaseTransitionSeconds: 0.8
+  AttackARange: 2.8
+  AttackAInterval: 2
+  AttackAWindupSeconds: 0.2
+  AttackAActiveSeconds: 0.62
+  AttackARecoverSeconds: 0.5
+  AttackBInterval: 3
+  AttackBWindupSeconds: 1.1
+  AttackBActiveSeconds: 0.6
+  AttackBRecoverSeconds: 0.5
+  ProjectileCount: 3
+  ProjectileSpreadDegrees: 24
+  SpecialInterval: 6
+  SpecialProjectileCount: 5
+  SpecialSpreadDegrees: 140
+  SpecialWindupSeconds: 1.4
+  SpecialActiveSeconds: 0.62
+  SpecialRecoverSeconds: 0.35
+  PursueDelaySeconds: 1.8
+  ChaseBurstSeconds: 1.1
+  EnrageSpeedMultiplier: 1.3
+  Phase2IntervalScale: 0.8
+  Phase3IntervalScale: 0.7
+  PurifyDamageMultiplier: 1.5

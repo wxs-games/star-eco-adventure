@@ -1,0 +1,83 @@
+# Unity 生成的缓存目录
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# 资产商店 / IDE
+Assets/AssetStoreTools*
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity 崩溃报告
+sysinfo.txt
+*.stackdump
+crashlytics-build.properties
+
+# 打包产物
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# 系统
+.DS_Store
+Thumbs.db
+
+#临时脚本不入库
+.workbuddy/
+Assets/Screenshots/
+Assets/Screenshots.meta
+
+# 一次性编辑器调试脚本：用完即弃，文件保留在本地磁盘，不入库
+Assets/Scripts/Editor/Apply*.cs*
+Assets/Scripts/Editor/Diagnose*.cs*
+Assets/Scripts/Editor/Fix*.cs*
+Assets/Scripts/Editor/Generate*.cs*
+Assets/Scripts/Editor/Inspect*.cs*
+Assets/Scripts/Editor/Log*.cs*
+Assets/Scripts/Editor/Open*.cs*
+Assets/Scripts/Editor/Patch*.cs*
+Assets/Scripts/Editor/Refresh*.cs*
+Assets/Scripts/Editor/Upgrade*.cs*
+Assets/Scripts/Editor/Verify*.cs*
+Assets/Scripts/Editor/Widen*.cs*
+Assets/Scripts/Editor/LevelDecorPass.cs*
+Assets/Scripts/Editor/Level03BindBossHealthBar.cs*
+Assets/Editor.meta
+Assets/Editor/FixAttackRange.cs*
+
+# Coplay 工具生成的临时计划模板（空壳）
+Assets/CoplayPlan.md*
+
+# 编译检查日志
+compile_check.log
+
+# 构建产物与发布包（走 GitHub Releases 分发，不入库）
+Builds/
+Releases/*.zip
+
+# 工具链的中间产物与预览图
+Tools/**/_preview/
+Tools/**/_预览/
+Tools/**/__pycache__/
+*.pyc

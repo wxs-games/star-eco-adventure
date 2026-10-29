@@ -1,0 +1,86 @@
+[
+ {
+  "frame": "Player_HeavyAttack_00.png",
+  "shift": 0.4,
+  "ux": -0.16595,
+  "uy": -0.22457,
+  "fist_area": 4623
+ },
+ {
+  "frame": "Player_HeavyAttack_01.png",
+  "shift": -19.4,
+  "ux": 0.04907,
+  "uy": -0.23588,
+  "fist_area": 7003
+ },
+ {
+  "frame": "Player_HeavyAttack_02.png",
+  "shift": -19.9,
+  "ux": 0.04879,
+  "uy": -0.23683,
+  "fist_area": 6968
+ },
+ {
+  "frame": "Player_HeavyAttack_03.png",
+  "shift": -20.8,
+  "ux": -0.06803,
+  "uy": 0.19736,
+  "fist_area": 2002
+ },
+ {
+  "frame": "Player_HeavyAttack_04.png",
+  "shift": -22.7,
+  "ux": -0.06374,
+  "uy": 0.18125,
+  "fist_area": 2058
+ },
+ {
+  "frame": "Player_HeavyAttack_05.png",
+  "shift": -31.6,
+  "ux": 0.19697,
+  "uy": -0.31316,
+  "fist_area": 3186
+ },
+ {
+  "frame": "Player_HeavyAttack_06.png",
+  "shift": -0.4,
+  "ux": 0.04958,
+  "uy": -0.32616,
+  "fist_area": 10075
+ },
+ {
+  "frame": "Player_HeavyAttack_07.png",
+  "shift": 51.4,
+  "ux": 0.0229,
+  "uy": -0.44999,
+  "fist_area": 14521
+ },
+ {
+  "frame": "Player_HeavyAttack_08.png",
+  "shift": 67.5,
+  "ux": 0.00812,
+  "uy": -0.44717,
+  "fist_area": 13118
+ },
+ {
+  "frame": "Player_HeavyAttack_09.png",
+  "shift": 32.0,
+  "ux": 0.07799,
+  "uy": -0.32734,
+  "fist_area": 12850
+ },
+ {
+  "frame": "Player_HeavyAttack_10.png",
+  "shift": 14.4,
+  "ux": -0.06672,
+  "uy": -0.24703,
+  "fist_area": 8143
+ },
+ {
+  "frame": "Player_HeavyAttack_11.png",
+  "shift": 0.4,
+  "ux": -0.16595,
+  "uy": -0.22457,
+  "fist_area": 4623
+ }
+]

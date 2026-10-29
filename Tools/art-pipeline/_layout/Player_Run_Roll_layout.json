@@ -1,0 +1,24 @@
+{
+  "prefix": "Player",
+  "out": "Sheets\\raw",
+  "grid": {
+    "cols": 4,
+    "rows": 4
+  },
+  "actions": [
+    {
+      "name": "Player_Run",
+      "row0": 1,
+      "row1": 2,
+      "col0": 1,
+      "col1": 4
+    },
+    {
+      "name": "Player_Roll",
+      "row0": 3,
+      "row1": 4,
+      "col0": 1,
+      "col1": 4
+    }
+  ]
+}

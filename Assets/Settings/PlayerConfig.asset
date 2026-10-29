@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0ac308350d15b64685d97d65e533bbb, type: 3}
+  m_Name: PlayerConfig
+  m_EditorClassIdentifier: 
+  MoveSpeed: 6
+  AirControlRatio: 0.85
+  Acceleration: 60
+  JumpVelocity: 13
+  JumpCutMultiplier: 0.5
+  GravityScale: 3
+  FallGravityMultiplier: 1.6
+  MaxFallSpeed: 20
+  CoyoteTime: 0.1
+  JumpBufferTime: 0.1
+  LandLockTime: 0.06
+  HurtInvincibleTime: 1
+  HurtKnockback: 6
+  DodgeDuration: 0.333
+  DodgeDistance: 3
+  DodgeInvincibleTime: 0.33
+  DodgeCooldown: 0.6
+  AirDodgeCount: 1
+  DodgePassThroughLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  DashDuration: 0.4
+  DashDistance: 2.8
+  DashCooldown: 0.5
+  AirDashCount: 1
+  CrouchSpeedFactor: 0.45
+  CrouchHeightRatio: 0.62
+  WallSlideSpeed: 4
+  WallCheckDistance: 0.1
+  WallJumpVelocity: 12
+  WallJumpPushSpeed: 7
+  WallJumpLockTime: 0.14
+  LedgeMinHeight: 0.35
+  LedgeMaxHeight: 1.7
+  LedgeCooldown: 0.4
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  GroundCheckSkin: 0.05

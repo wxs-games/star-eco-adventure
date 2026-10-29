@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01489188d5123a7428358e377de249da, type: 3}
+  m_Name: Tower01Config
+  m_EditorClassIdentifier: 
+  EnemyTypeId: Tower01
+  IsStatic: 1
+  AttackKind: 1
+  MaxHP: 16
+  KnockbackResponse: 0
+  MoveSpeed: 0
+  AttackDamage: 2
+  AttackRange: 12
+  AttackInterval: 1.5
+  AttackKnockback: 0
+  PerceptionRadius: 13
+  LoseTargetSeconds: 1.5
+  LoseTargetBuffer: 1
+  SameGroundToleranceY: 2
+  HurtStunSeconds: 0.3
+  ProjectileSpeed: 8
+  ProjectileMaxRange: 14
+  ProjectilePrewarm: 4
+  AimSeconds: 0.4
+  FireSeconds: 0.5
+  SpawnSeconds: 0
+  DropTable: {fileID: 0}
+  AnimFrameRate: 12
+  PlayerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 1024

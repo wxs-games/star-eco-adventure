@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4cadbd7ff5370742964761bbc0d9fbd, type: 3}
+  m_Name: EcoConfig
+  m_EditorClassIdentifier: 
+  SprayDPS: 2
+  SprayTickSeconds: 0.25
+  SprayMoveSpeedFactor: 0.3
+  EnemySprayCostMultiplier: 2
+  TankConsumePerSecond: 8
+  HeavyChargeSeconds: 0.8
+  HeavyPurifyAmount: 40
+  HeavyDamage: 3
+  HeavyKnockback: 8
+  HeavyCost: 25
+  HeavyRecoverSeconds: 0.5
+  HeavyWaveScale: 2
+  TankCapacity: 100
+  InitialTank: 100
+  TankRechargeDelay: 1.5
+  TankRechargePerSecond: 12
+  PickupTankAmount: 20
+  GarbagePurifyRequired: 4
+  GarbageWallPurifyRequired: 60
+  GarbagePurityValue: 5
+  GarbageWallPurityValue: 10
+  GarbagePollutedTint: {r: 0.45, g: 0.38, b: 0.32, a: 1}
+  GarbageCleanTint: {r: 0.62, g: 0.78, b: 0.55, a: 1}
+  TowerPurifyRequired: 30
+  TowerPurityValue: 10
+  PollutedColor: {r: 0.45, g: 0.4, b: 0.52, a: 1}
+  CleanColor: {r: 0.56, g: 0.74, b: 0.5, a: 1}
+  AtmosphereLerpSpeed: 2
+  EnemyLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  PlayerLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
