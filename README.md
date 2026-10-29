@@ -195,7 +195,7 @@ XML 检查发现不了"横线丢了""引用被裁切"这类版式问题。这套
 | 📦 版本 | v1.0 |
 | 📏 体积 | 约 330 MB（zip 压缩后约 98 MB） |
 | 🖥 要求 | Windows 10 / 11 64 位 |
-| 💾 下载 | [Releases 页面下载](https://github.com/wxs-games/star-eco-adventure/releases) |
+| 💾 下载 | [⬇️ 直接下载 StarEco-v1.0-win64.zip](https://github.com/wxs-games/star-eco-adventure/releases/download/v1.0/StarEco-v1.0-win64.zip) |
 
 > 解压后请运行 `StarEco.exe`。**必须保留整个目录结构** —— `StarEco.exe` 与 `StarEco_Data/` 是配套的，
 > 只拷 exe 无法运行（Unity 标准结构）。
